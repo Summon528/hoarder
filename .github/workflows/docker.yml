@@ -5,7 +5,7 @@ on:
       - created
   push:
     branches:
-      - main
+      - forked
 
 jobs:
   push:
@@ -36,7 +36,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_GITHUB_PAT }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build ${{ matrix.package }}
         uses: docker/build-push-action@v5
@@ -47,9 +47,9 @@ jobs:
           target: ${{ matrix.target }}
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ghcr.io/hoarder-app/${{ matrix.package }}:latest,ghcr.io/mohamedbassem/${{ matrix.package }}:latest
-          cache-from: type=registry,ref=ghcr.io/hoarder-app/hoarder-build-cache:${{ matrix.target }}
-          cache-to: type=registry,mode=max,ref=ghcr.io/hoarder-app/hoarder-build-cache:${{ matrix.target }}
+          tags: ghcr.io/summon528/${{ matrix.package }}:latest
+          cache-from: type=registry,ref=ghcr.io/summon528/hoarder-build-cache:${{ matrix.target }}
+          cache-to: type=registry,mode=max,ref=ghcr.io/summon528/hoarder-build-cache:${{ matrix.target }}
 
       - name: Build ${{ matrix.package }} (release)
         uses: docker/build-push-action@v5
@@ -61,6 +61,6 @@ jobs:
           target: ${{ matrix.target }}
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ghcr.io/hoarder-app/${{ matrix.package }}:${{ github.event.release.name }},ghcr.io/hoarder-app/${{ matrix.package }}:release,ghcr.io/mohamedbassem/${{ matrix.package }}:${{ github.event.release.name }},ghcr.io/mohamedbassem/${{ matrix.package }}:release
-          cache-from: type=registry,ref=ghcr.io/hoarder-app/hoarder-build-cache:${{ matrix.target }}
-          cache-to: type=registry,mode=max,ref=ghcr.io/hoarder-app/hoarder-build-cache:${{ matrix.target }}
+          tags: ghcr.io/summon528/${{ matrix.package }}:${{ github.event.release.name }},ghcr.io/summon528/${{ matrix.package }}:release
+          cache-from: type=registry,ref=ghcr.io/summon528/hoarder-build-cache:${{ matrix.target }}
+          cache-to: type=registry,mode=max,ref=ghcr.io/summon528/hoarder-build-cache:${{ matrix.target }}
